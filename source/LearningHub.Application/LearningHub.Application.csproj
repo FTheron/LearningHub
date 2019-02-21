@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LearningHub.Database\LearningHub.Database.csproj" />
+    <ProjectReference Include="..\LearningHub.Model\LearningHub.Model.csproj" />
+  </ItemGroup>
+
+</Project>
