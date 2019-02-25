@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LearningHub.Application\LearningHub.Application.csproj" />
+    <ProjectReference Include="..\LearningHub.IoC\LearningHub.IoC.csproj" />
   </ItemGroup>
 
 </Project>

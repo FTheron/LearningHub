@@ -1,34 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DotNetCore.AspNetCore;
+using LearningHub.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LearningHub.Web
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public Startup(IHostingEnvironment environment)
         {
+            Configuration = environment.Configuration();
+            Environment = environment;
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+        private IConfiguration Configuration { get; }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+        private IHostingEnvironment Environment { get; }
+        
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder application)
+        {
+            application.UseExceptionDefault(Environment);
+            application.UseCorsDefault();
+            application.UseHstsDefault(Environment);
+            application.UseHttpsRedirection();
+            application.UseAuthentication();
+            application.UseResponseCompression();
+            application.UseResponseCaching();
+            application.UseStaticFiles();
+            application.UseMvcWithDefaultRoute();
+            application.UseHealthChecks("/healthz");
+            application.UseSwaggerDefault("api");
+            //application.UseSpaStaticFiles();
+            //application.UseSpaAngularServer(Environment, "Frontend", "serve");
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddDependencyInjection(Configuration);
+            services.AddCors();
+            services.AddAuthenticationDefault();
+            services.AddResponseCompression();
+            services.AddResponseCaching();
+            services.AddMvcDefault();
+            services.AddHealthChecks();
+            services.AddSwaggerDefault("api");
+            //services.AddSpaStaticFiles("Frontend/dist");
         }
     }
 }

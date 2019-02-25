@@ -5,11 +5,13 @@ VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningHub.Model", "LearningHub.Model\LearningHub.Model.csproj", "{32AD9ADA-6F2A-4C56-8E75-8C139B5B04B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningHub.Application", "LearningHub.Application\LearningHub.Application.csproj", "{711EB53E-863A-424E-8122-C5BB833AA0E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningHub.Application", "LearningHub.Application\LearningHub.Application.csproj", "{711EB53E-863A-424E-8122-C5BB833AA0E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningHub.Web", "LearningHub.Web\LearningHub.Web.csproj", "{582FE12C-D317-42C1-A37E-D110438C47E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningHub.Web", "LearningHub.Web\LearningHub.Web.csproj", "{582FE12C-D317-42C1-A37E-D110438C47E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningHub.Database", "LearningHub.Database\LearningHub.Database.csproj", "{F2391916-198D-4ED8-A0B8-86323AD0E118}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningHub.Database", "LearningHub.Database\LearningHub.Database.csproj", "{F2391916-198D-4ED8-A0B8-86323AD0E118}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningHub.IoC", "LearningHub.IoC\LearningHub.IoC.csproj", "{356C9CF2-D29B-405C-BAE2-06F745AB682D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{F2391916-198D-4ED8-A0B8-86323AD0E118}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2391916-198D-4ED8-A0B8-86323AD0E118}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2391916-198D-4ED8-A0B8-86323AD0E118}.Release|Any CPU.Build.0 = Release|Any CPU
+		{356C9CF2-D29B-405C-BAE2-06F745AB682D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{356C9CF2-D29B-405C-BAE2-06F745AB682D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{356C9CF2-D29B-405C-BAE2-06F745AB682D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{356C9CF2-D29B-405C-BAE2-06F745AB682D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

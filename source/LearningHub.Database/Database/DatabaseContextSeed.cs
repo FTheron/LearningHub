@@ -13,6 +13,16 @@ namespace LearningHub.Database.Database
                 Name = "Francois",
                 Age = 25
             });
+            modelBuilder.Entity<LecturerEntity>().HasData(new LecturerEntity
+            {
+                LecturerId = 1,
+                Name = "Professor Albus Dumbledore"
+            });
+            modelBuilder.Entity<CourseEntity>().HasData(new CourseEntity
+            {
+                CourseId = 1,
+                Name = "CS50"
+            });
         }
     }
 }

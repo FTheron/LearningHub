@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LearningHub.Database.Student
 {
-    public sealed class UserLogEntityConfiguration : IEntityTypeConfiguration<StudentEntity>
+    public sealed class StudentEntityConfiguration : IEntityTypeConfiguration<StudentEntity>
     {
         public void Configure(EntityTypeBuilder<StudentEntity> builder)
         {
@@ -15,6 +15,8 @@ namespace LearningHub.Database.Student
             builder.Property(x => x.StudentId).IsRequired().ValueGeneratedOnAdd();
             builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Age).IsRequired();
+
+            builder.HasOne(x => x.Course).WithMany(x => x.Students).HasForeignKey(x => x.StudentId);
         }
     }
 }

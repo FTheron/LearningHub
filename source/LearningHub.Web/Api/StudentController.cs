@@ -1,6 +1,7 @@
 ﻿using DotNetCore.AspNetCore;
 using LearningHub.Application.Student;
 using LearningHub.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace LearningHub.Web.Api
 
         private IStudentService StudentService { get; }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AddAsync(AddStudentModel addUserModel)
         {

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetCore.IoC" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LearningHub.Application\LearningHub.Application.csproj" />
+    <ProjectReference Include="..\LearningHub.Database\LearningHub.Database.csproj" />
+  </ItemGroup>
+
+</Project>

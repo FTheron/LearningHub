@@ -10,6 +10,6 @@ namespace LearningHub.Model.Entities
 
         public int Age { get; set; }
 
-        public virtual ICollection<CourseEntity> Courses { get; set; }
+        public virtual CourseEntity Course { get; set; }
     }
 }

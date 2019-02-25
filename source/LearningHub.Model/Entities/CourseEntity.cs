@@ -8,6 +8,8 @@ namespace LearningHub.Model.Entities
 
         public string Name { get; set; }
 
+        public int MaxStudents { get; set; }
+
         public virtual LecturerEntity Lecturer { get; set; }
 
         public virtual ICollection<StudentEntity> Students { get; set; }
