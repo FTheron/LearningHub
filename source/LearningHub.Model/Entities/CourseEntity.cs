@@ -12,6 +12,6 @@ namespace LearningHub.Model.Entities
 
         public virtual LecturerEntity Lecturer { get; set; }
 
-        public virtual ICollection<StudentEntity> Students { get; set; }
+        public virtual ICollection<StudentEntity> Students { get; set; } = new HashSet<StudentEntity>();
     }
 }

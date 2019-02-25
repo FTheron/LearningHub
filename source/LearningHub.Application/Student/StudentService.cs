@@ -1,4 +1,5 @@
 ﻿using DotNetCore.Objects;
+using LearningHub.Database.Course;
 using LearningHub.Database.Database;
 using LearningHub.Database.Student;
 using LearningHub.Model.Entities;
@@ -9,15 +10,18 @@ namespace LearningHub.Application.Student
 {
     public sealed class StudentService : IStudentService
     {
-        public StudentService(IDatabaseUnitOfWork databaseUnitOfWork, IStudentRepository studentRepository)
+        public StudentService(IDatabaseUnitOfWork databaseUnitOfWork, IStudentRepository studentRepository, ICourseRepository courseRepository)
         {
-            StudentRepository = studentRepository;
             DatabaseUnitOfWork = databaseUnitOfWork;
+            StudentRepository = studentRepository;
+            CourseRepository = courseRepository;
         }
 
         private IDatabaseUnitOfWork DatabaseUnitOfWork { get; }
 
         private IStudentRepository StudentRepository { get; }
+
+        private ICourseRepository CourseRepository { get; }
 
         public async Task<IDataResult<long>> AddAsync(AddStudentModel addUserModel)
         {
@@ -26,9 +30,13 @@ namespace LearningHub.Application.Student
             if (!validation.Success)
                 return new ErrorDataResult<long>(validation.Message);
 
-            // TODO: Move building of Entity
-            StudentEntity studentEntity = new StudentEntity { Name = addUserModel.Name, Age = addUserModel.Age };
+            var course = await CourseRepository.SelectAsync(addUserModel.CourseId);
 
+            if (course is null)
+                return new ErrorDataResult<long>("Course does not exist");
+            // TODO: Move building of Entity
+            StudentEntity studentEntity = new StudentEntity { Name = addUserModel.Name, Age = addUserModel.Age, Course = course };
+            
             await StudentRepository.AddAsync(studentEntity);
             await DatabaseUnitOfWork.SaveChangesAsync();
 

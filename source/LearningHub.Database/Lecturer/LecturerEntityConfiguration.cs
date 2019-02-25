@@ -14,8 +14,6 @@ namespace LearningHub.Database.Lecturer
 
             builder.Property(x => x.LecturerId).IsRequired().ValueGeneratedOnAdd();
             builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
-
-            builder.HasMany(x => x.Courses).WithOne(x => x.Lecturer).HasForeignKey(x => x.CourseId);
         }
     }
 }

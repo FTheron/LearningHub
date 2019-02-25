@@ -15,8 +15,6 @@ namespace LearningHub.Database.Student
             builder.Property(x => x.StudentId).IsRequired().ValueGeneratedOnAdd();
             builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Age).IsRequired();
-
-            builder.HasOne(x => x.Course).WithMany(x => x.Students).HasForeignKey(x => x.StudentId);
         }
     }
 }

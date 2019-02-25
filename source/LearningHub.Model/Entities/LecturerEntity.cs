@@ -8,6 +8,6 @@ namespace LearningHub.Model.Entities
 
         public string Name { get; set; }
 
-        public virtual ICollection<CourseEntity> Courses { get; set; }
+        public virtual ICollection<CourseEntity> Courses { get; set; } = new HashSet<CourseEntity>();
     }
 }
