@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace LearningHub.Model.Entities
+﻿namespace LearningHub.Model.Entities
 {
     public class StudentEntity
     {
@@ -10,6 +8,6 @@ namespace LearningHub.Model.Entities
 
         public int Age { get; set; }
 
-        public virtual CourseEntity Course { get; set; }
+        public long CourseId { get; set; }
     }
 }

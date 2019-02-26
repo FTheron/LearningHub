@@ -31,12 +31,14 @@ namespace LearningHub.Application.Student
                 return new ErrorDataResult<long>(validation.Message);
 
             var course = await CourseRepository.SelectAsync(addUserModel.CourseId);
-
-            if (course is null)
-                return new ErrorDataResult<long>("Course does not exist");
-            // TODO: Move building of Entity
-            StudentEntity studentEntity = new StudentEntity { Name = addUserModel.Name, Age = addUserModel.Age, Course = course };
             
+            if (course is null)
+                return new ErrorDataResult<long>("Course does not exist.");
+            if (course.MaxStudents <= StudentRepository.Count(x => x.CourseId == addUserModel.CourseId))
+                return new ErrorDataResult<long>("Course full. No more students are accepted.");
+
+            StudentEntity studentEntity = new StudentEntity { Name = addUserModel.Name, Age = addUserModel.Age, CourseId = addUserModel.CourseId };
+
             await StudentRepository.AddAsync(studentEntity);
             await DatabaseUnitOfWork.SaveChangesAsync();
 

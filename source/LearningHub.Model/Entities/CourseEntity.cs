@@ -10,8 +10,6 @@ namespace LearningHub.Model.Entities
 
         public int MaxStudents { get; set; }
 
-        public virtual LecturerEntity Lecturer { get; set; }
-
-        public virtual ICollection<StudentEntity> Students { get; set; } = new HashSet<StudentEntity>();
+        public long LecturerId { get; set; }
     }
 }

@@ -7,22 +7,29 @@ namespace LearningHub.Database.Database
     {
         public void Seed(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<StudentEntity>().HasData(new StudentEntity
-            {
-                StudentId = 1,
-                Name = "Francois",
-                Age = 25
-            });
-            modelBuilder.Entity<LecturerEntity>().HasData(new LecturerEntity
+            LecturerEntity lecturer = new LecturerEntity()
             {
                 LecturerId = 1,
                 Name = "Professor Albus Dumbledore"
-            });
-            modelBuilder.Entity<CourseEntity>().HasData(new CourseEntity
+            };
+            CourseEntity course = new CourseEntity()
             {
                 CourseId = 1,
-                Name = "CS50"
-            });
+                Name = "CS50",
+                LecturerId = 1,
+                MaxStudents = 3
+            };
+            StudentEntity student = new StudentEntity()
+            {
+                StudentId = 1,
+                Name = "Francois Theron",
+                Age = 25,
+                CourseId = 1
+            };
+
+            modelBuilder.Entity<LecturerEntity>().HasData(lecturer);
+            modelBuilder.Entity<CourseEntity>().HasData(course);
+            modelBuilder.Entity<StudentEntity>().HasData(student);
         }
     }
 }

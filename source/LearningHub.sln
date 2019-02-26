@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningHub.Web", "Learning
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningHub.Database", "LearningHub.Database\LearningHub.Database.csproj", "{F2391916-198D-4ED8-A0B8-86323AD0E118}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningHub.IoC", "LearningHub.IoC\LearningHub.IoC.csproj", "{356C9CF2-D29B-405C-BAE2-06F745AB682D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningHub.IoC", "LearningHub.IoC\LearningHub.IoC.csproj", "{356C9CF2-D29B-405C-BAE2-06F745AB682D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EF50FECD-490B-476E-AF83-89B03110929D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
