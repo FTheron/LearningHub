@@ -20,6 +20,17 @@ namespace LearningHub.Web.Api
 
         [AllowAnonymous]
         [HttpPost]
+        [Route("Add")]
+        public async Task<IActionResult> Add(AddStudentModel addUserModel)
+        {
+            var result = await StudentService.Add(addUserModel);
+
+            return new ActionIResult(result);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("AddAsync")]
         public async Task<IActionResult> AddAsync(AddStudentModel addUserModel)
         {
             var result = await StudentService.AddAsync(addUserModel);

@@ -2,8 +2,11 @@
 using LearningHub.Database.Course;
 using LearningHub.Database.Database;
 using LearningHub.Database.Student;
-using LearningHub.Model.Entities;
+using LearningHub.Domain;
 using LearningHub.Model.Models;
+using Microsoft.Azure.ServiceBus;
+using Newtonsoft.Json;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LearningHub.Application.Student
@@ -23,26 +26,41 @@ namespace LearningHub.Application.Student
 
         private ICourseRepository CourseRepository { get; }
 
-        public async Task<IDataResult<long>> AddAsync(AddStudentModel addUserModel)
+        public async Task<IDataResult<long>> Add(AddStudentModel addStudentModel)
         {
-            var validation = new AddStudentModelValidator().Valid(addUserModel);
+            var validation = new AddStudentModelValidator().Valid(addStudentModel);
 
             if (!validation.Success)
                 return new ErrorDataResult<long>(validation.Message);
 
-            var course = await CourseRepository.SelectAsync(addUserModel.CourseId);
-            
-            if (course is null)
-                return new ErrorDataResult<long>("Course does not exist.");
-            if (course.MaxStudents <= StudentRepository.Count(x => x.CourseId == addUserModel.CourseId))
-                return new ErrorDataResult<long>("Course full. No more students are accepted.");
+            StudentDomain domain = new StudentDomain(DatabaseUnitOfWork, StudentRepository, CourseRepository);
 
-            StudentEntity studentEntity = new StudentEntity { Name = addUserModel.Name, Age = addUserModel.Age, CourseId = addUserModel.CourseId };
+            var student = domain.ConvertToStudentEntity(addStudentModel);
+            string errorMessage = await domain.ApplyBusinessRules(student);
 
-            await StudentRepository.AddAsync(studentEntity);
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+                return new ErrorDataResult<long>(errorMessage);
+
+            await StudentRepository.AddAsync(student);
             await DatabaseUnitOfWork.SaveChangesAsync();
 
-            return new SuccessDataResult<long>(studentEntity.StudentId);
+            return new SuccessDataResult<long>(student.StudentId);
+        }
+        
+        public async Task<IDataResult<long>> AddAsync(AddStudentModel addStudentModel)
+        {
+            var validation = new AddStudentModelValidator().Valid(addStudentModel);
+
+            if (!validation.Success)
+                return new ErrorDataResult<long>(validation.Message);
+
+            // TODO: Add dependency injection and move the url to a safe location. Azure Key Fault
+            IQueueClient queueClient = new QueueClient(ServiceBusConnectionString, QueueName);
+
+            var encodedMessage = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(addStudentModel)));
+            await queueClient.SendAsync(encodedMessage);
+
+            return new SuccessDataResult<long>("Added to Processing Queue");
         }
     }
 }

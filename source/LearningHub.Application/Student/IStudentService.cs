@@ -7,6 +7,7 @@ namespace LearningHub.Application.Student
 {
     public interface IStudentService
     {
-        Task<IDataResult<long>> AddAsync(AddStudentModel addUserModel);
+        Task<IDataResult<long>> Add(AddStudentModel addStudentModel);
+        Task<IDataResult<long>> AddAsync(AddStudentModel addStudentModel);
     }
 }
