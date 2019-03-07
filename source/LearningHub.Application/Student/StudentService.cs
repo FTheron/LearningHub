@@ -14,9 +14,6 @@ namespace LearningHub.Application.Student
 {
     public sealed class StudentService : IStudentService
     {
-        private static readonly string ServiceBusConnectionString = Environment.GetEnvironmentVariable("ServiceBusConnectionString");
-        private static readonly string QueueName = Environment.GetEnvironmentVariable("QueueName");
-
         public StudentService(IDatabaseUnitOfWork databaseUnitOfWork, IStudentRepository studentRepository, ICourseRepository courseRepository)
         {
             DatabaseUnitOfWork = databaseUnitOfWork;
@@ -58,8 +55,8 @@ namespace LearningHub.Application.Student
             if (!validation.Success)
                 return new ErrorDataResult<long>(validation.Message);
 
-            // TODO: Add dependency injection and move the url to a safe location. Azure Key Fault
-            IQueueClient queueClient = new QueueClient(ServiceBusConnectionString, QueueName);
+            // TODO: Add dependency injection.
+            IQueueClient queueClient = new QueueClient(Environment.GetEnvironmentVariable("LearningHub_AzureServiceBus"), Environment.GetEnvironmentVariable("LearningHub_QueueName"));
 
             var encodedMessage = new Message(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(addStudentModel)));
             await queueClient.SendAsync(encodedMessage);

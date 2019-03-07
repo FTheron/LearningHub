@@ -8,8 +8,6 @@ namespace LearningHub.Agent
 {
     public static class Program
     {
-        private static readonly string ServiceBusConnectionString = Environment.GetEnvironmentVariable("ServiceBusConnectionString");
-        private static readonly string QueueName = Environment.GetEnvironmentVariable("QueueName");
         private static IQueueClient queueClient;
 
         private static void Main()
@@ -19,7 +17,7 @@ namespace LearningHub.Agent
 
         private static async Task MainAsync()
         {
-            queueClient = new QueueClient(ServiceBusConnectionString, QueueName);
+            queueClient = new QueueClient(Environment.GetEnvironmentVariable("LearningHub_AzureServiceBus"), Environment.GetEnvironmentVariable("LearningHub_QueueName"));
 
             Console.WriteLine("======================================================");
             Console.WriteLine("Press ENTER key to stop receiving messages and exit.");
