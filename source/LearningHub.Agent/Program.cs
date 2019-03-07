@@ -10,18 +10,28 @@ using System.Threading.Tasks;
 
 namespace LearningHub.Agent
 {
-    public static class Program
+    public class Program
     {
-        private static IQueueClient queueClient;
+        private IQueueClient queueClient;
+        private IDatabaseUnitOfWork DatabaseUnitOfWork;
+        private IStudentRepository StudentRepository;
+        private ICourseRepository CourseRepository;
+        private StudentDomain StudentDomain;
 
-        private static void Main()
+        private void Main()
         {
             MainAsync().GetAwaiter().GetResult();
         }
 
-        private static async Task MainAsync()
+        private async Task MainAsync()
         {
             queueClient = new QueueClient(Environment.GetEnvironmentVariable("LearningHub_AzureServiceBus"), Environment.GetEnvironmentVariable("LearningHub_QueueName"));
+            DatabaseContextFactory dbFactory = new DatabaseContextFactory();
+            var databaseContext = dbFactory.CreateDbContext(new string[] { });
+            var DatabaseUnitOfWork = new DatabaseUnitOfWork(databaseContext);
+            var StudentRepository = new StudentRepository(databaseContext);
+            var CourseRepository = new CourseRepository(databaseContext);
+            StudentDomain = new StudentDomain(DatabaseUnitOfWork, StudentRepository, CourseRepository);
 
             Console.WriteLine("======================================================");
             Console.WriteLine("Press ENTER key to stop receiving messages and exit.");
@@ -35,7 +45,7 @@ namespace LearningHub.Agent
             await queueClient.CloseAsync();
         }
 
-        private static void RegisterOnMessageHandlerAndReceiveMessages()
+        private void RegisterOnMessageHandlerAndReceiveMessages()
         {
             // Configure the message handler options in terms of exception handling, number of concurrent messages to deliver, etc.
             var messageHandlerOptions = new MessageHandlerOptions(ExceptionReceivedHandler)
@@ -53,21 +63,13 @@ namespace LearningHub.Agent
             queueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
         }
 
-        private static async Task ProcessMessagesAsync(Message message, CancellationToken token)
+        private async Task ProcessMessagesAsync(Message message, CancellationToken token)
         {
             // Process the message.
             Console.WriteLine($"Received message: SequenceNumber:{message.SystemProperties.SequenceNumber} Body:{Encoding.UTF8.GetString(message.Body)}");
-
-            DatabaseContextFactory dbFactory = new DatabaseContextFactory();
-            var databaseContext = dbFactory.CreateDbContext(new string[] { });
-            var databaseUnitOfWork = new DatabaseUnitOfWork(databaseContext);
-            var studentRepository = new StudentRepository(databaseContext);
-            var courseRepository = new CourseRepository(databaseContext);
-
-            StudentDomain domain = new StudentDomain(databaseUnitOfWork, studentRepository, courseRepository);
-
-            var student = domain.ConvertToStudentEntity(Encoding.UTF8.GetString(message.Body));
-            string errorMessage = await domain.ApplyBusinessRules(student);
+            
+            var student = StudentDomain.ConvertToStudentEntity(Encoding.UTF8.GetString(message.Body));
+            string errorMessage = await StudentDomain.ApplyBusinessRules(student);
 
             if (!string.IsNullOrWhiteSpace(errorMessage))
             {
@@ -75,8 +77,8 @@ namespace LearningHub.Agent
             }
             else
             {
-                await studentRepository.AddAsync(student);
-                await databaseUnitOfWork.SaveChangesAsync();
+                await StudentRepository.AddAsync(student);
+                await DatabaseUnitOfWork.SaveChangesAsync();
 
                 SendMail($"Student added Successfully. StudentId:{student.StudentId}");
             }
@@ -91,7 +93,7 @@ namespace LearningHub.Agent
         }
 
         // Use this handler to examine the exceptions received on the message pump.
-        private static Task ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
+        private Task ExceptionReceivedHandler(ExceptionReceivedEventArgs exceptionReceivedEventArgs)
         {
             Console.WriteLine($"Message handler encountered an exception {exceptionReceivedEventArgs.Exception}.");
             var context = exceptionReceivedEventArgs.ExceptionReceivedContext;
@@ -102,7 +104,7 @@ namespace LearningHub.Agent
             return Task.CompletedTask;
         }
 
-        private static void SendMail(string emailMessage)
+        private void SendMail(string emailMessage)
         {
             Console.WriteLine("Email:" + emailMessage);
         }
