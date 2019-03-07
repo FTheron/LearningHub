@@ -1,8 +1,12 @@
-﻿using System;
+﻿using LearningHub.Database.Course;
+using LearningHub.Database.Database;
+using LearningHub.Database.Student;
+using LearningHub.Domain;
+using Microsoft.Azure.ServiceBus;
+using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Azure.ServiceBus;
 
 namespace LearningHub.Agent
 {
@@ -54,6 +58,29 @@ namespace LearningHub.Agent
             // Process the message.
             Console.WriteLine($"Received message: SequenceNumber:{message.SystemProperties.SequenceNumber} Body:{Encoding.UTF8.GetString(message.Body)}");
 
+            DatabaseContextFactory dbFactory = new DatabaseContextFactory();
+            var databaseContext = dbFactory.CreateDbContext(new string[] { });
+            var databaseUnitOfWork = new DatabaseUnitOfWork(databaseContext);
+            var studentRepository = new StudentRepository(databaseContext);
+            var courseRepository = new CourseRepository(databaseContext);
+
+            StudentDomain domain = new StudentDomain(databaseUnitOfWork, studentRepository, courseRepository);
+
+            var student = domain.ConvertToStudentEntity(Encoding.UTF8.GetString(message.Body));
+            string errorMessage = await domain.ApplyBusinessRules(student);
+
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                SendMail("Student not added, " + errorMessage);
+            }
+            else
+            {
+                await studentRepository.AddAsync(student);
+                await databaseUnitOfWork.SaveChangesAsync();
+
+                SendMail($"Student added Successfully. StudentId:{student.StudentId}");
+            }
+
             // Complete the message so that it is not received again.
             // This can be done only if the queue Client is created in ReceiveMode.PeekLock mode (which is the default).
             await queueClient.CompleteAsync(message.SystemProperties.LockToken);
@@ -73,6 +100,11 @@ namespace LearningHub.Agent
             Console.WriteLine($"- Entity Path: {context.EntityPath}");
             Console.WriteLine($"- Executing Action: {context.Action}");
             return Task.CompletedTask;
+        }
+
+        private static void SendMail(string emailMessage)
+        {
+            Console.WriteLine("Email:" + emailMessage);
         }
     }
 }
