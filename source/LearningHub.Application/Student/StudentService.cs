@@ -6,6 +6,7 @@ using LearningHub.Domain;
 using LearningHub.Model.Models;
 using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;
+using System;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +14,9 @@ namespace LearningHub.Application.Student
 {
     public sealed class StudentService : IStudentService
     {
+        private static readonly string ServiceBusConnectionString = Environment.GetEnvironmentVariable("ServiceBusConnectionString");
+        private static readonly string QueueName = Environment.GetEnvironmentVariable("QueueName");
+
         public StudentService(IDatabaseUnitOfWork databaseUnitOfWork, IStudentRepository studentRepository, ICourseRepository courseRepository)
         {
             DatabaseUnitOfWork = databaseUnitOfWork;

@@ -8,6 +8,8 @@ namespace LearningHub.Agent
 {
     public static class Program
     {
+        private static readonly string ServiceBusConnectionString = Environment.GetEnvironmentVariable("ServiceBusConnectionString");
+        private static readonly string QueueName = Environment.GetEnvironmentVariable("QueueName");
         private static IQueueClient queueClient;
 
         private static void Main()
