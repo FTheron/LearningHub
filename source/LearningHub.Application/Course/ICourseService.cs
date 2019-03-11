@@ -7,7 +7,7 @@ namespace LearningHub.Application.Course
 {
     public interface ICourseService
     {
-        Task<IEnumerable<CourseInfo>> GetCourseListAsync();
-        Task<IDataResult<CourseDetail>> GetCourseDetail(int courseId);
+        Task<IEnumerable<CourseDetail>> GetCourseList();
+        Task<CourseInfo> GetCourseDetail(int courseId);
     }
 }

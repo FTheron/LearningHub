@@ -1,11 +1,15 @@
 ﻿using DotNetCore.AspNetCore;
 using LearningHub.Application.Course;
+using LearningHub.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LearningHub.Web.Api
 {
+    [ApiController]
+    [RouteController]
     public class CourseController
     {
         public CourseController(ICourseService courseService)
@@ -17,20 +21,16 @@ namespace LearningHub.Web.Api
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetList()
+        public async Task<IEnumerable<CourseDetail>> GetList()
         {
-            var result = await CourseService.GetCourseListAsync();
-
-            return new ActionIResult(result);
+            return await CourseService.GetCourseList();
         }
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetDetail(int id)
+        public async Task<CourseInfo> GetDetail(int id)
         {
-            var result = await CourseService.GetCourseDetail(id);
-
-            return new ActionIResult(result);
+            return await CourseService.GetCourseDetail(id);
         }
     }
 }

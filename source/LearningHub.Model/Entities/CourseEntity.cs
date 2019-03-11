@@ -8,7 +8,7 @@ namespace LearningHub.Model.Entities
 
         public string Name { get; set; }
 
-        public int MaxStudents { get; set; }
+        public long MaxStudents { get; set; }
 
         public long LecturerId { get; set; }
     }

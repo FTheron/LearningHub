@@ -18,9 +18,10 @@ namespace LearningHub.Agent
         private ICourseRepository CourseRepository;
         private StudentDomain StudentDomain;
 
-        private void Main()
+        private static void Main()
         {
-            MainAsync().GetAwaiter().GetResult();
+            Program program = new Program();
+            program.MainAsync().GetAwaiter().GetResult();
         }
 
         private async Task MainAsync()
@@ -28,9 +29,9 @@ namespace LearningHub.Agent
             queueClient = new QueueClient(Environment.GetEnvironmentVariable("LearningHub_AzureServiceBus"), Environment.GetEnvironmentVariable("LearningHub_QueueName"));
             DatabaseContextFactory dbFactory = new DatabaseContextFactory();
             var databaseContext = dbFactory.CreateDbContext(new string[] { });
-            var DatabaseUnitOfWork = new DatabaseUnitOfWork(databaseContext);
-            var StudentRepository = new StudentRepository(databaseContext);
-            var CourseRepository = new CourseRepository(databaseContext);
+            DatabaseUnitOfWork = new DatabaseUnitOfWork(databaseContext);
+            StudentRepository = new StudentRepository(databaseContext);
+            CourseRepository = new CourseRepository(databaseContext);
             StudentDomain = new StudentDomain(DatabaseUnitOfWork, StudentRepository, CourseRepository);
 
             Console.WriteLine("======================================================");

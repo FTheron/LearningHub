@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
         public CourseAgeDetail AgeDetail { get; set; }
-        public int Capasity { get; set; }
-        public int CurrentStudentCount { get; set; }
+        public long Capasity { get; set; }
+        public long CurrentStudentCount { get; set; }
     }
 }
