@@ -33,8 +33,6 @@ namespace LearningHub.Web
             application.UseMvcWithDefaultRoute();
             application.UseHealthChecks("/healthz");
             application.UseSwaggerDefault("api");
-            //application.UseSpaStaticFiles();
-            //application.UseSpaAngularServer(Environment, "Frontend", "serve");
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -47,7 +45,7 @@ namespace LearningHub.Web
             services.AddMvcDefault();
             services.AddHealthChecks();
             services.AddSwaggerDefault("api");
-            //services.AddSpaStaticFiles("Frontend/dist");
+            services.AddMemoryCache();
         }
     }
 }
