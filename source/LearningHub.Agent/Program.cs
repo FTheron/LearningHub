@@ -12,11 +12,11 @@ namespace LearningHub.Agent
 {
     public class Program
     {
-        private IQueueClient queueClient;
-        private IDatabaseUnitOfWork DatabaseUnitOfWork;
-        private IStudentRepository StudentRepository;
-        private ICourseRepository CourseRepository;
-        private StudentDomain StudentDomain;
+        private IQueueClient queuClient;
+        private IDatabaseUnitOfWork databaseUnitOfWork;
+        private IStudentRepository studentRepository;
+        private ICourseRepository courseRepository;
+        private StudentDomain studentDomain;
 
         private static void Main()
         {
@@ -26,13 +26,13 @@ namespace LearningHub.Agent
 
         private async Task MainAsync()
         {
-            queueClient = new QueueClient(Environment.GetEnvironmentVariable("LearningHub_AzureServiceBus"), Environment.GetEnvironmentVariable("LearningHub_QueueName"));
+            queuClient = new QueueClient(Environment.GetEnvironmentVariable("LearningHub_AzureServiceBus"), Environment.GetEnvironmentVariable("LearningHub_QueueName"));
             DatabaseContextFactory dbFactory = new DatabaseContextFactory();
             var databaseContext = dbFactory.CreateDbContext(new string[] { });
-            DatabaseUnitOfWork = new DatabaseUnitOfWork(databaseContext);
-            StudentRepository = new StudentRepository(databaseContext);
-            CourseRepository = new CourseRepository(databaseContext);
-            StudentDomain = new StudentDomain(DatabaseUnitOfWork, StudentRepository, CourseRepository);
+            databaseUnitOfWork = new DatabaseUnitOfWork(databaseContext);
+            studentRepository = new StudentRepository(databaseContext);
+            courseRepository = new CourseRepository(databaseContext);
+            studentDomain = new StudentDomain(databaseUnitOfWork, studentRepository, courseRepository);
 
             Console.WriteLine("======================================================");
             Console.WriteLine("Press ENTER key to stop receiving messages and exit.");
@@ -43,7 +43,7 @@ namespace LearningHub.Agent
 
             Console.ReadKey();
 
-            await queueClient.CloseAsync();
+            await queuClient.CloseAsync();
         }
 
         private void RegisterOnMessageHandlerAndReceiveMessages()
@@ -61,7 +61,7 @@ namespace LearningHub.Agent
             };
 
             // Register the function that processes messages.
-            queueClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
+            queuClient.RegisterMessageHandler(ProcessMessagesAsync, messageHandlerOptions);
         }
 
         private async Task ProcessMessagesAsync(Message message, CancellationToken token)
@@ -69,8 +69,8 @@ namespace LearningHub.Agent
             // Process the message.
             Console.WriteLine($"Received message: SequenceNumber:{message.SystemProperties.SequenceNumber} Body:{Encoding.UTF8.GetString(message.Body)}");
             
-            var student = StudentDomain.ConvertToStudentEntity(Encoding.UTF8.GetString(message.Body));
-            string errorMessage = await StudentDomain.ApplyBusinessRules(student);
+            var student = studentDomain.ConvertToStudentEntity(Encoding.UTF8.GetString(message.Body));
+            string errorMessage = await studentDomain.ApplyBusinessRules(student);
 
             if (!string.IsNullOrWhiteSpace(errorMessage))
             {
@@ -78,15 +78,15 @@ namespace LearningHub.Agent
             }
             else
             {
-                await StudentRepository.AddAsync(student);
-                await DatabaseUnitOfWork.SaveChangesAsync();
+                await studentRepository.AddAsync(student);
+                await databaseUnitOfWork.SaveChangesAsync();
 
                 SendMail($"Student added Successfully. StudentId:{student.StudentId}");
             }
 
             // Complete the message so that it is not received again.
             // This can be done only if the queue Client is created in ReceiveMode.PeekLock mode (which is the default).
-            await queueClient.CompleteAsync(message.SystemProperties.LockToken);
+            await queuClient.CompleteAsync(message.SystemProperties.LockToken);
 
             // Note: Use the cancellationToken passed as necessary to determine if the queueClient has already been closed.
             // If queueClient has already been closed, you can choose to not call CompleteAsync() or AbandonAsync() etc.

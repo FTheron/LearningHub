@@ -6,9 +6,6 @@ namespace LearningHub.Database.Lecturer
 {
     public sealed class LecturerRepository : EntityFrameworkCoreRepository<LecturerEntity>, ILecturerRepository
     {
-        public LecturerRepository(DatabaseContext context) : base(context)
-        {
-
-        }
+        public LecturerRepository(DatabaseContext context) : base(context) { }
     }
 }
