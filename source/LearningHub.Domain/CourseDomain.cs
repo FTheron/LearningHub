@@ -35,9 +35,9 @@ namespace LearningHub.Domain
             courseDetail.Name = courseEntity.Name;
             courseDetail.AgeDetail = new CourseAgeDetail()
             {
-                AverageAge = StudentRepository.List().Where(x => x.CourseId == courseEntity.CourseId).Average(x => x.Age),
-                MaximumAge = StudentRepository.List().Where(x => x.CourseId == courseEntity.CourseId).Max(x => x.Age),
-                MinimumAge = StudentRepository.List().Where(x => x.CourseId == courseEntity.CourseId).Min(x => x.Age)
+                AverageAge = StudentRepository.Queryable.Where(x => x.CourseId == courseEntity.CourseId).Average(x => x.Age),
+                MaximumAge = StudentRepository.Queryable.Where(x => x.CourseId == courseEntity.CourseId).Max(x => x.Age),
+                MinimumAge = StudentRepository.Queryable.Where(x => x.CourseId == courseEntity.CourseId).Min(x => x.Age)
             };
             courseDetail.Capasity = courseEntity.MaxStudents;
             courseDetail.CurrentStudentCount = StudentRepository.Count(x => x.CourseId == courseEntity.CourseId);
@@ -51,7 +51,7 @@ namespace LearningHub.Domain
             courseInfo.CourseDetail = GetCourseDetail(courseId);
             CourseEntity courseEntity = CourseRepository.FirstOrDefault(x => x.CourseId == courseId);
             courseInfo.Lecturer = LecturerRepository.FirstOrDefault(x => x.LecturerId == courseEntity.LecturerId).Name;
-            var studentEntities = StudentRepository.List().Where(x => x.CourseId == courseId);
+            var studentEntities = StudentRepository.Queryable.Where(x => x.CourseId == courseId);
             var students = new List<Student>();
             foreach (var studentEntity in studentEntities)
             {
