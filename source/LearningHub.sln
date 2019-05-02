@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningHub.Model", "LearningHub.Model\LearningHub.Model.csproj", "{32AD9ADA-6F2A-4C56-8E75-8C139B5B04B7}"
 EndProject
@@ -15,9 +15,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningHub.IoC", "Learning
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EF50FECD-490B-476E-AF83-89B03110929D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningHub.Agent", "LearningHub.Agent\LearningHub.Agent.csproj", "{F9D85173-A0B2-4D2A-A144-7928A08AFC62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningHub.Agent", "LearningHub.Agent\LearningHub.Agent.csproj", "{F9D85173-A0B2-4D2A-A144-7928A08AFC62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningHub.Domain", "LearningHub.Domain\LearningHub.Domain.csproj", "{A509692B-4AB9-4ADD-BB69-DE8A67AE8DE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningHub.Domain", "LearningHub.Domain\LearningHub.Domain.csproj", "{A509692B-4AB9-4ADD-BB69-DE8A67AE8DE6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4796B9C4-F882-4DAB-9B99-1D9013D18766}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningHub.ApplicationCore", "LearningHub.ApplicationCore\LearningHub.ApplicationCore.csproj", "{AF8B3C35-3715-42D4-A74A-90B9B0F03727}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearningHub.Infrastructure", "LearningHub.Infrastructure\LearningHub.Infrastructure.csproj", "{11F02058-3924-4DFB-AECE-DF2D9CD496B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,9 +59,22 @@ Global
 		{A509692B-4AB9-4ADD-BB69-DE8A67AE8DE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A509692B-4AB9-4ADD-BB69-DE8A67AE8DE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A509692B-4AB9-4ADD-BB69-DE8A67AE8DE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF8B3C35-3715-42D4-A74A-90B9B0F03727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF8B3C35-3715-42D4-A74A-90B9B0F03727}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF8B3C35-3715-42D4-A74A-90B9B0F03727}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF8B3C35-3715-42D4-A74A-90B9B0F03727}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11F02058-3924-4DFB-AECE-DF2D9CD496B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11F02058-3924-4DFB-AECE-DF2D9CD496B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11F02058-3924-4DFB-AECE-DF2D9CD496B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11F02058-3924-4DFB-AECE-DF2D9CD496B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F9D85173-A0B2-4D2A-A144-7928A08AFC62} = {4796B9C4-F882-4DAB-9B99-1D9013D18766}
+		{AF8B3C35-3715-42D4-A74A-90B9B0F03727} = {4796B9C4-F882-4DAB-9B99-1D9013D18766}
+		{11F02058-3924-4DFB-AECE-DF2D9CD496B8} = {4796B9C4-F882-4DAB-9B99-1D9013D18766}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7C885059-67B1-44FE-93B4-970615213651}
